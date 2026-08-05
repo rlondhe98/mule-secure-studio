@@ -1,0 +1,1863 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+  <meta
+    name="description"
+    content="Mule Secure Studio is a local Windows desktop tool for encrypting and decrypting Mule secure properties."
+  />
+  <meta name="theme-color" content="#003B5C" />
+
+  <title>Mule Secure Studio — Secure Properties Made Simple</title>
+
+  <style>
+    :root {
+      --navy: #003b5c;
+      --navy-deep: #002a44;
+      --blue: #00a1df;
+      --blue-dark: #006c9c;
+      --blue-light: #e4f7ff;
+      --cyan: #00b4b0;
+      --cyan-light: #ddf8f6;
+
+      --background: #f4f8fb;
+      --surface: #ffffff;
+      --surface-muted: #f8fcff;
+      --text: #032d60;
+      --text-muted: #53687f;
+      --border: #cfe5f1;
+
+      --success: #2e844a;
+      --success-light: #e4f7ea;
+
+      --shadow-sm: 0 8px 22px rgb(0 86 135 / 0.08);
+      --shadow-md: 0 22px 55px rgb(0 71 113 / 0.15);
+
+      --radius-sm: 0.75rem;
+      --radius-md: 1.15rem;
+      --radius-lg: 1.6rem;
+
+      --page-width: 74rem;
+    }
+
+    [data-theme="dark"] {
+      --navy: #062d48;
+      --navy-deep: #021d30;
+      --blue: #46bdf1;
+      --blue-dark: #8bdcff;
+      --blue-light: #103c59;
+      --cyan: #4cd5d0;
+      --cyan-light: #133f40;
+
+      --background: #071521;
+      --surface: #102131;
+      --surface-muted: #132a3d;
+      --text: #eff8ff;
+      --text-muted: #acc0d0;
+      --border: #29465e;
+
+      --success: #67d491;
+      --success-light: #123d2a;
+
+      --shadow-sm: 0 8px 22px rgb(0 0 0 / 0.22);
+      --shadow-md: 0 22px 55px rgb(0 0 0 / 0.36);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-width: 20rem;
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 4% 0%, rgb(0 161 223 / 0.14), transparent 29rem),
+        radial-gradient(circle at 98% 12%, rgb(0 180 176 / 0.12), transparent 24rem),
+        var(--background);
+      font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :focus-visible {
+      outline: 3px solid rgb(0 161 223 / 0.6);
+      outline-offset: 3px;
+    }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--page-width));
+      margin-inline: auto;
+    }
+
+    .section {
+      padding: 5.5rem 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin: 0 0 0.9rem;
+      color: var(--blue-dark);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 999px;
+      background: currentColor;
+      content: "";
+    }
+
+    .section-title {
+      max-width: 45rem;
+      margin: 0;
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      line-height: 1.12;
+      letter-spacing: -0.05em;
+    }
+
+    .section-copy {
+      max-width: 44rem;
+      margin: 1rem 0 0;
+      color: var(--text-muted);
+      font-size: 1.03rem;
+    }
+
+    /* ======================================================
+       Buttons
+       ====================================================== */
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      min-height: 3rem;
+      padding: 0.8rem 1.1rem;
+      border: 1px solid transparent;
+      border-radius: 0.85rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition:
+        transform 180ms ease,
+        box-shadow 180ms ease,
+        border-color 180ms ease,
+        background-color 180ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button svg {
+      width: 1.15rem;
+      height: 1.15rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+    }
+
+    .button-primary {
+      color: #fff;
+      background: linear-gradient(135deg, #00a1df, #0075a8);
+      box-shadow: 0 14px 26px rgb(0 161 223 / 0.28);
+    }
+
+    .button-primary:hover {
+      background: linear-gradient(135deg, #0092cd, #006493);
+      box-shadow: 0 18px 32px rgb(0 161 223 / 0.36);
+    }
+
+    .button-secondary {
+      color: var(--text);
+      border-color: var(--border);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .button-secondary:hover {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+
+    .icon-button {
+      display: inline-grid;
+      width: 2.7rem;
+      height: 2.7rem;
+      place-items: center;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      color: var(--text);
+      background: var(--surface);
+      cursor: pointer;
+    }
+
+    .icon-button svg {
+      width: 1.15rem;
+      height: 1.15rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+    }
+
+    /* ======================================================
+       Navigation
+       ====================================================== */
+    .site-header {
+      position: sticky;
+      z-index: 20;
+      top: 0;
+      border-bottom: 1px solid rgb(255 255 255 / 0.1);
+      background: linear-gradient(110deg, #003b5c 0%, #005f8f 58%, #007cb8 100%);
+      backdrop-filter: blur(1rem);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 4.8rem;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.72rem;
+      color: #fff;
+      font-weight: 850;
+      letter-spacing: -0.025em;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 2.3rem;
+      height: 2.3rem;
+      place-items: center;
+      border-radius: 0.72rem;
+      color: #fff;
+      background: linear-gradient(135deg, #23b5f4, #0082c4);
+      box-shadow: 0 8px 18px rgb(0 0 0 / 0.17);
+    }
+
+    .brand-mark svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+
+    .nav-links a {
+      padding: 0.55rem 0.75rem;
+      border-radius: 0.65rem;
+      color: rgb(255 255 255 / 0.8);
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+      background: rgb(255 255 255 / 0.12);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .nav-actions .icon-button {
+      color: #fff;
+      border-color: rgb(255 255 255 / 0.22);
+      background: rgb(255 255 255 / 0.09);
+    }
+
+    .nav-download {
+      padding: 0.62rem 0.92rem;
+      border-radius: 0.72rem;
+      color: #003b5c;
+      background: #fff;
+      font-size: 0.86rem;
+      font-weight: 850;
+    }
+
+    .nav-download:hover {
+      color: #fff;
+      background: #00a1df;
+    }
+
+    .menu-toggle {
+      display: none;
+    }
+
+    /* ======================================================
+       Hero
+       ====================================================== */
+    .hero {
+      overflow: hidden;
+      padding: 5.5rem 0 4.7rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      align-items: center;
+      grid-template-columns: minmax(0, 1.08fr) minmax(20rem, 0.92fr);
+      gap: clamp(2.25rem, 6vw, 5rem);
+    }
+
+    .hero h1 {
+      max-width: 43rem;
+      margin: 0;
+      font-size: clamp(2.65rem, 6vw, 5rem);
+      line-height: 0.98;
+      letter-spacing: -0.07em;
+    }
+
+    .hero h1 span {
+      color: var(--blue-dark);
+    }
+
+    .hero-copy {
+      max-width: 39rem;
+      margin: 1.35rem 0 0;
+      color: var(--text-muted);
+      font-size: clamp(1rem, 2vw, 1.14rem);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.65rem;
+    }
+
+    .hero-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      max-width: 40rem;
+      margin: 1.3rem 0 0;
+      color: var(--text-muted);
+      font-size: 0.87rem;
+    }
+
+    .hero-note strong {
+      color: var(--text);
+    }
+
+    .hero-note svg {
+      width: 1.15rem;
+      height: 1.15rem;
+      flex: 0 0 auto;
+      margin-top: 0.1rem;
+      color: var(--success);
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      margin-top: 2.2rem;
+    }
+
+    .stat {
+      padding: 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: rgb(255 255 255 / 0.7);
+    }
+
+    [data-theme="dark"] .stat {
+      background: rgb(16 33 49 / 0.72);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 0.96rem;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 0.22rem;
+      color: var(--text-muted);
+      font-size: 0.79rem;
+    }
+
+    /* ======================================================
+       App preview
+       ====================================================== */
+    .app-preview {
+      position: relative;
+    }
+
+    .app-preview::before {
+      position: absolute;
+      z-index: -1;
+      inset: 10% -8% -9% 10%;
+      border-radius: 50%;
+      background: rgb(0 161 223 / 0.25);
+      content: "";
+      filter: blur(4rem);
+    }
+
+    .app-window {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 1.35rem;
+      background: var(--surface);
+      box-shadow: var(--shadow-md);
+    }
+
+    .window-topbar {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      min-height: 2.55rem;
+      padding: 0 1rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-muted);
+    }
+
+    .window-dot {
+      width: 0.62rem;
+      height: 0.62rem;
+      border-radius: 50%;
+      background: #ff6b6b;
+    }
+
+    .window-dot:nth-child(2) {
+      background: #ffca5f;
+    }
+
+    .window-dot:nth-child(3) {
+      background: #5ed096;
+    }
+
+    .window-title {
+      margin-left: 0.4rem;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .preview-body {
+      padding: 1.15rem;
+    }
+
+    .preview-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .preview-heading strong {
+      font-size: 0.9rem;
+    }
+
+    .preview-tag {
+      padding: 0.24rem 0.5rem;
+      border-radius: 999px;
+      color: #006c9c;
+      background: #e2f7ff;
+      font-size: 0.67rem;
+      font-weight: 850;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 0.7rem;
+    }
+
+    .preview-field {
+      min-height: 3.8rem;
+      padding: 0.68rem;
+      border: 1px solid var(--border);
+      border-radius: 0.72rem;
+      background: var(--surface-muted);
+    }
+
+    .preview-field label {
+      display: block;
+      margin-bottom: 0.3rem;
+      color: var(--text-muted);
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .preview-field span {
+      display: block;
+      overflow: hidden;
+      color: var(--text);
+      font-size: 0.8rem;
+      font-weight: 750;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .preview-result {
+      min-height: 7.3rem;
+      margin-top: 0.75rem;
+      padding: 0.85rem;
+      border: 1px solid #a7dff5;
+      border-radius: 0.72rem;
+      color: #006c9c;
+      background: #ecfaff;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 0.72rem;
+      line-height: 1.8;
+    }
+
+    [data-theme="dark"] .preview-result {
+      border-color: #236789;
+      color: #9edfff;
+      background: #082d43;
+    }
+
+    .preview-actions {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 0.75rem;
+    }
+
+    .preview-action {
+      flex: 1;
+      padding: 0.55rem;
+      border-radius: 0.58rem;
+      color: #006c9c;
+      background: #e2f7ff;
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 850;
+    }
+
+    /* ======================================================
+       Features
+       ====================================================== */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+
+    .feature-card {
+      min-height: 15rem;
+      padding: 1.35rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+      transition:
+        transform 180ms ease,
+        box-shadow 180ms ease,
+        border-color 180ms ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: #7fcff0;
+      box-shadow: var(--shadow-md);
+    }
+
+    .feature-icon {
+      display: grid;
+      width: 2.8rem;
+      height: 2.8rem;
+      place-items: center;
+      margin-bottom: 1.05rem;
+      border-radius: 0.8rem;
+      color: #007cb8;
+      background: #e2f7ff;
+    }
+
+    .feature-icon svg {
+      width: 1.3rem;
+      height: 1.3rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+    }
+
+    .feature-card h3 {
+      margin: 0;
+      font-size: 1.04rem;
+    }
+
+    .feature-card p {
+      margin: 0.55rem 0 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* ======================================================
+       Modes
+       ====================================================== */
+    .modes-layout {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 1.2rem;
+      margin-top: 2.4rem;
+    }
+
+    .mode-tabs {
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    .mode-tab {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 0.9rem;
+      color: var(--text);
+      background: var(--surface);
+      text-align: left;
+      cursor: pointer;
+      transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        background-color 180ms ease;
+    }
+
+    .mode-tab:hover {
+      border-color: #7fcff0;
+      background: var(--surface-muted);
+      transform: translateX(3px);
+    }
+
+    .mode-tab[aria-selected="true"] {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+
+    .mode-tab strong {
+      display: block;
+      font-size: 0.96rem;
+    }
+
+    .mode-tab span {
+      display: block;
+      margin-top: 0.25rem;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+    }
+
+    .mode-panel {
+      min-height: 18rem;
+      padding: clamp(1.35rem, 4vw, 2.2rem);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .mode-panel h3 {
+      margin: 0;
+      font-size: 1.5rem;
+      letter-spacing: -0.035em;
+    }
+
+    .mode-panel p {
+      margin: 0.85rem 0 0;
+      color: var(--text-muted);
+    }
+
+    .mode-list {
+      display: grid;
+      gap: 0.75rem;
+      margin: 1.35rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .mode-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      font-size: 0.9rem;
+    }
+
+    .mode-list li::before {
+      width: 1.2rem;
+      height: 1.2rem;
+      flex: 0 0 auto;
+      margin-top: 0.1rem;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--cyan);
+      content: "✓";
+      font-size: 0.72rem;
+      font-weight: 900;
+      line-height: 1.2rem;
+      text-align: center;
+    }
+
+    /* ======================================================
+       Steps
+       ====================================================== */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2.4rem;
+    }
+
+    .step {
+      padding: 1.35rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+    }
+
+    .step-number {
+      display: grid;
+      width: 2.45rem;
+      height: 2.45rem;
+      place-items: center;
+      margin-bottom: 1rem;
+      border-radius: 0.75rem;
+      color: white;
+      background: linear-gradient(135deg, #00a1df, #007cb8);
+      font-size: 0.8rem;
+      font-weight: 900;
+    }
+
+    .step h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .step p {
+      margin: 0.5rem 0 0;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    /* ======================================================
+       Security
+       ====================================================== */
+    .security-box {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1rem;
+      padding: clamp(1.35rem, 4vw, 2.2rem);
+      border: 1px solid #9cdbd7;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, #ecfcfb, #e8f7fd);
+    }
+
+    [data-theme="dark"] .security-box {
+      border-color: #1f6f6a;
+      background: linear-gradient(135deg, #092f31, #0b2d42);
+    }
+
+    .security-icon {
+      display: grid;
+      width: 3.4rem;
+      height: 3.4rem;
+      place-items: center;
+      border-radius: 1rem;
+      color: #008b87;
+      background: var(--cyan-light);
+    }
+
+    .security-icon svg {
+      width: 1.65rem;
+      height: 1.65rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+    }
+
+    .security-box h2 {
+      margin: 0;
+      font-size: clamp(1.55rem, 3vw, 2.2rem);
+      letter-spacing: -0.04em;
+    }
+
+    .security-box p {
+      max-width: 48rem;
+      margin: 0.65rem 0 0;
+      color: var(--text-muted);
+    }
+
+    /* ======================================================
+       Download
+       ====================================================== */
+    .download-card {
+      overflow: hidden;
+      position: relative;
+      padding: clamp(1.7rem, 5vw, 3.2rem);
+      border-radius: var(--radius-lg);
+      color: #fff;
+      background: linear-gradient(125deg, #003b5c 0%, #006c9c 56%, #00a1df 130%);
+      box-shadow: var(--shadow-md);
+    }
+
+    .download-card::after {
+      position: absolute;
+      right: -8rem;
+      bottom: -12rem;
+      width: 21rem;
+      height: 21rem;
+      border-radius: 50%;
+      background: rgb(0 180 176 / 0.33);
+      content: "";
+      filter: blur(0.5rem);
+    }
+
+    .download-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .download-card h2 {
+      max-width: 45rem;
+      margin: 0;
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -0.055em;
+    }
+
+    .download-card p {
+      max-width: 44rem;
+      margin: 0.9rem 0 0;
+      color: rgb(255 255 255 / 0.8);
+    }
+
+    .download-card .button-primary {
+      color: #003b5c;
+      background: #fff;
+      box-shadow: none;
+    }
+
+    .download-card .button-primary:hover {
+      color: #006c9c;
+      background: #e8f7fd;
+    }
+
+    .download-card .button-secondary {
+      color: #fff;
+      border-color: rgb(255 255 255 / 0.35);
+      background: rgb(255 255 255 / 0.1);
+      box-shadow: none;
+    }
+
+    .download-card .button-secondary:hover {
+      border-color: #fff;
+      background: rgb(255 255 255 / 0.18);
+    }
+
+    .download-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.25rem;
+      margin-top: 1.2rem;
+      color: rgb(255 255 255 / 0.72);
+      font-size: 0.82rem;
+    }
+
+    /* ======================================================
+       Footer
+       ====================================================== */
+    footer {
+      padding: 2rem 0;
+      color: var(--text-muted);
+      font-size: 0.84rem;
+    }
+
+    .footer-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1.6rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-disclaimer {
+      display: grid;
+      gap: 0.2rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-links a:hover {
+      color: var(--blue-dark);
+    }
+
+    /* ======================================================
+       Dialog
+       ====================================================== */
+    dialog {
+      width: min(calc(100% - 2rem), 38rem);
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 1.2rem;
+      color: var(--text);
+      background: var(--surface);
+      box-shadow: var(--shadow-md);
+    }
+
+    dialog::backdrop {
+      background: rgb(5 18 36 / 0.58);
+      backdrop-filter: blur(0.25rem);
+    }
+
+    .dialog-content {
+      padding: 1.4rem;
+    }
+
+    .dialog-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .dialog-heading h2 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .dialog-content ol {
+      display: grid;
+      gap: 0.78rem;
+      padding-left: 1.3rem;
+      color: var(--text-muted);
+    }
+
+    /* ======================================================
+       Responsive
+       ====================================================== */
+    @media (max-width: 54rem) {
+      .nav-links,
+      .nav-download {
+        display: none;
+      }
+
+      .menu-toggle {
+        display: inline-grid;
+        place-items: center;
+      }
+
+      .site-header[data-menu-open="true"] .nav {
+        flex-wrap: wrap;
+        padding-bottom: 0.85rem;
+      }
+
+      .site-header[data-menu-open="true"] .nav-links {
+        display: grid;
+        width: 100%;
+        grid-template-columns: repeat(2, 1fr);
+        order: 3;
+      }
+
+      .hero {
+        padding-top: 3.8rem;
+      }
+
+      .hero-grid,
+      .modes-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-grid,
+      .steps {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .app-preview {
+        max-width: 36rem;
+        margin-inline: auto;
+      }
+    }
+
+    @media (max-width: 38rem) {
+      .section {
+        padding: 4.2rem 0;
+      }
+
+      .feature-grid,
+      .steps,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-actions {
+        display: grid;
+      }
+
+      .hero-actions .button {
+        width: 100%;
+      }
+
+      .security-box {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-content {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+	/* ======================================================
+   Prerequisites
+   ====================================================== */
+.prerequisite-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 2.4rem;
+}
+
+.prerequisite-card {
+  padding: 1.35rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.prerequisite-card h3 {
+  margin: 0;
+  font-size: 1.03rem;
+}
+
+.prerequisite-card p {
+  margin: 0.55rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.prerequisite-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.9rem;
+  padding: 0.32rem 0.58rem;
+  border-radius: 999px;
+  color: #006c9c;
+  background: #e2f7ff;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.prerequisite-badge::before {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 50%;
+  background: #00a1df;
+  content: "";
+}
+
+.terminal {
+  overflow-x: auto;
+  margin-top: 1rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid #153d5a;
+  border-radius: 0.75rem;
+  color: #bdeaff;
+  background: #06233a;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  white-space: pre;
+}
+
+.terminal .prompt {
+  color: #65d8a0;
+}
+
+.terminal .command {
+  color: #ffffff;
+}
+
+.prerequisite-list {
+  display: grid;
+  gap: 0.65rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.prerequisite-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  color: var(--text-muted);
+  font-size: 0.87rem;
+}
+
+.prerequisite-list li::before {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: 0 0 auto;
+  margin-top: 0.1rem;
+  border-radius: 50%;
+  color: #ffffff;
+  background: var(--cyan);
+  content: "✓";
+  font-size: 0.67rem;
+  font-weight: 900;
+  line-height: 1.1rem;
+  text-align: center;
+}
+
+@media (max-width: 54rem) {
+  .prerequisite-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+  <header class="site-header" id="siteHeader">
+    <nav class="nav container" aria-label="Primary navigation">
+      <a class="brand" href="#top" aria-label="Mule Secure Studio home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 3 4.5 6v5c0 4.6 3.2 8.8 7.5 10 4.3-1.2 7.5-5.4 7.5-10V6L12 3Z"></path>
+            <path d="m8.8 12 2.1 2.1 4.3-4.4"></path>
+          </svg>
+        </span>
+        <span>Mule Secure Studio</span>
+      </a>
+
+      <div class="nav-links">
+		  <a href="#features">Features</a>
+		  <a href="#modes">Modes</a>
+		  <a href="#prerequisites">Prerequisites</a>
+		  <a href="#how-it-works">How it works</a>
+		  <a href="#security">Security</a>
+		</div>
+
+
+      <div class="nav-actions">
+        <button
+          class="icon-button"
+          id="themeToggle"
+          type="button"
+          aria-label="Toggle dark mode"
+          title="Toggle theme"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3v2"></path>
+            <path d="M12 19v2"></path>
+            <path d="m4.2 4.2 1.4 1.4"></path>
+            <path d="m18.4 18.4 1.4 1.4"></path>
+            <path d="M3 12h2"></path>
+            <path d="M19 12h2"></path>
+            <path d="m4.2 19.8 1.4-1.4"></path>
+            <path d="m18.4 5.6 1.4-1.4"></path>
+            <circle cx="12" cy="12" r="4"></circle>
+          </svg>
+        </button>
+
+        <a
+          class="nav-download"
+          href="https://github.com/rlondhe98/mule-secure-studio/releases/latest/download/MuleSoftSecureProperties.exe"
+        >
+          Download
+        </a>
+
+        <button
+          class="icon-button menu-toggle"
+          id="menuToggle"
+          type="button"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 7h16"></path>
+            <path d="M4 12h16"></path>
+            <path d="M4 17h16"></path>
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">Local desktop utility</p>
+
+          <h1>
+            Secure Mule properties
+            <span>without command-line friction.</span>
+          </h1>
+
+          <p class="hero-copy">
+            Mule Secure Studio is a local Windows utility for encrypting and
+            decrypting single values, YAML configuration properties, and full
+            configuration files using the MuleSoft Secure Properties Tool.
+          </p>
+
+          <div class="hero-actions">
+            <a
+              class="button button-primary"
+              href="https://github.com/rlondhe98/mule-secure-studio/releases/latest/download/MuleSoftSecureProperties.exe"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v12"></path>
+                <path d="m7 10 5 5 5-5"></path>
+                <path d="M5 21h14"></path>
+              </svg>
+              Download for Windows
+            </a>
+
+            <button class="button button-secondary" id="howButton" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M10 8.5 15 12l-5 3.5V8.5Z"></path>
+              </svg>
+              See how it works
+            </button>
+          </div>
+
+          <div class="hero-note">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3 4.5 6v5c0 4.6 3.2 8.8 7.5 10 4.3-1.2 7.5-5.4 7.5-10V6L12 3Z"></path>
+              <path d="m8.8 12 2.1 2.1 4.3-4.4"></path>
+            </svg>
+
+            <span>
+              <strong>Your key stays local.</strong>
+              It is not sent to a browser and is not stored by the tool.
+            </span>
+          </div>
+
+          <div class="stats">
+            <article class="stat">
+              <strong>Local processing</strong>
+              <span>Runs on your Windows machine.</span>
+            </article>
+
+            <article class="stat">
+              <strong>Copy-ready output</strong>
+              <span>Review and copy results instantly.</span>
+            </article>
+
+            <article class="stat">
+              <strong>Optional export</strong>
+              <span>Save a file only when you decide.</span>
+            </article>
+          </div>
+        </div>
+
+        <div class="app-preview" aria-label="Mule Secure Studio application preview">
+          <div class="app-window">
+            <div class="window-topbar" aria-hidden="true">
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+              <span class="window-title">Mule Secure Studio</span>
+            </div>
+
+            <div class="preview-body">
+              <div class="preview-heading">
+                <strong>Configuration</strong>
+                <span class="preview-tag">Local processing</span>
+              </div>
+
+              <div class="preview-grid">
+                <div class="preview-field">
+                  <label>Operation</label>
+                  <span>Encrypt</span>
+                </div>
+
+                <div class="preview-field">
+                  <label>Content type</label>
+                  <span>Single value</span>
+                </div>
+
+                <div class="preview-field">
+                  <label>Algorithm</label>
+                  <span>AES</span>
+                </div>
+
+                <div class="preview-field">
+                  <label>Mode</label>
+                  <span>CBC</span>
+                </div>
+              </div>
+
+              <div class="preview-result">
+                ![X5XU5Q6oUUtVwPSB7DZ4lQ==]<br />
+                <span style="opacity: .7">Generated securely on your device</span>
+              </div>
+
+              <div class="preview-actions">
+                <div class="preview-action">Copy result</div>
+                <div class="preview-action">Export result</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="container">
+        <p class="eyebrow">Built for developer flow</p>
+
+        <h2 class="section-title">
+          Everything needed for a simpler secure-properties workflow.
+        </h2>
+
+        <p class="section-copy">
+          Replace repetitive commands, quoting issues, file-path mistakes, and
+          manual output-file handling with one focused desktop interface.
+        </p>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3 4.5 6v5c0 4.6 3.2 8.8 7.5 10 4.3-1.2 7.5-5.4 7.5-10V6L12 3Z"></path>
+                <path d="M9 12h6"></path>
+                <path d="M12 9v6"></path>
+              </svg>
+            </div>
+
+            <h3>Encrypt and decrypt values</h3>
+
+            <p>
+              Process individual passwords, API keys, tokens, client secrets,
+              and other sensitive values.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 3h7l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"></path>
+                <path d="M14 3v5h5"></path>
+                <path d="M8.5 13h7"></path>
+                <path d="M8.5 17h5"></path>
+              </svg>
+            </div>
+
+            <h3>Process YAML and properties files</h3>
+
+            <p>
+              Select files through a native picker, process secure properties,
+              preview the generated content, and export only when needed.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 12.5 11 14.5 15.5 10"></path>
+                <path d="M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"></path>
+              </svg>
+            </div>
+
+            <h3>Preview before export</h3>
+
+            <p>
+              View generated output in the tool first, copy it immediately, or
+              export it as a file only when required.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="modes">
+      <div class="container">
+        <p class="eyebrow">Three processing modes</p>
+
+        <h2 class="section-title">Choose the workflow that fits your task.</h2>
+
+        <p class="section-copy">
+          Select a processing mode to understand how Mule Secure Studio handles
+          individual values and configuration files.
+        </p>
+
+        <div class="modes-layout">
+          <div class="mode-tabs" role="tablist" aria-label="Processing modes">
+            <button
+              class="mode-tab"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="modePanel"
+              data-mode="single"
+            >
+              <strong>Single value</strong>
+              <span>One password, token, API key, or secret.</span>
+            </button>
+
+            <button
+              class="mode-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="modePanel"
+              data-mode="properties"
+            >
+              <strong>Property values in file</strong>
+              <span>Keep YAML/properties structure readable.</span>
+            </button>
+
+            <button
+              class="mode-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="modePanel"
+              data-mode="file"
+            >
+              <strong>Entire file contents</strong>
+              <span>Secure the complete file as one block.</span>
+            </button>
+          </div>
+
+          <article class="mode-panel" id="modePanel" role="tabpanel">
+            <p class="eyebrow">Single value</p>
+
+            <h3 id="modeTitle">Encrypt or decrypt one secret.</h3>
+
+            <p id="modeDescription">
+              Use this mode for an individual value that you want to place into
+              a Mule configuration file or use elsewhere in your deployment
+              workflow.
+            </p>
+
+            <ul class="mode-list" id="modeList">
+              <li>Encrypt a password, token, client secret, or API key.</li>
+              <li>Copy the generated result directly from the application.</li>
+              <li>Optionally use the result in Mule secure-property syntax.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+	<section class="section" id="prerequisites">
+  <div class="container">
+    <p class="eyebrow">Before you begin</p>
+
+    <h2 class="section-title">
+      Java 17 is required to run Mule Secure Studio.
+    </h2>
+
+    <p class="section-copy">
+      Mule Secure Studio includes the user interface and MuleSoft Secure
+      Properties JAR, but it uses the Java runtime installed on your Windows
+      machine to perform encryption and decryption.
+    </p>
+
+    <div class="prerequisite-grid">
+      <!-- Requirement -->
+      <article class="prerequisite-card">
+        <span class="prerequisite-badge">Required</span>
+
+        <h3>Java 17 installed</h3>
+
+        <p>
+          Install an approved Java 17 JDK or JRE on your Windows system before
+          launching the application.
+        </p>
+
+        <ul class="prerequisite-list">
+          <li>Java version 17 is recommended.</li>
+          <li>Use your organisation-approved Java distribution.</li>
+          <li>Contact your IT team if software installation requires approval.</li>
+        </ul>
+      </article>
+
+      <!-- Verify -->
+      <article class="prerequisite-card">
+        <span class="prerequisite-badge">Verify setup</span>
+
+        <h3>Check Java from Command Prompt</h3>
+
+        <p>
+          Open Command Prompt or PowerShell and run the following command:
+        </p>
+
+        <div class="terminal"><span class="prompt">PS C:\&gt;</span> <span class="command">java -version</span></div>
+
+        <p>
+          The output should show a Java version beginning with:
+        </p>
+
+        <div class="terminal">openjdk version "17.x.x"<br />or<br />java version "17.x.x"</div>
+      </article>
+
+      <!-- Troubleshooting -->
+      <article class="prerequisite-card">
+        <span class="prerequisite-badge">Troubleshooting</span>
+
+        <h3>If Java is not detected</h3>
+
+        <p>
+          If you see the message below, Java is either not installed or not
+          available in the Windows PATH environment variable.
+        </p>
+
+        <div class="terminal">'java' is not recognized as an internal or external command</div>
+
+        <ul class="prerequisite-list">
+          <li>Install Java 17 using an approved installer.</li>
+          <li>Close and reopen Command Prompt or PowerShell after installation.</li>
+          <li>Run <code>java -version</code> again to confirm the setup.</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+    <section class="section" id="how-it-works">
+      <div class="container">
+        <p class="eyebrow">Simple workflow</p>
+
+        <h2 class="section-title">
+          From download to secure output in three steps.
+        </h2>
+
+        <div class="steps">
+          <article class="step">
+            <div class="step-number">01</div>
+            <h3>Download and launch</h3>
+            <p>
+              Download the Windows application and run it locally from your
+              preferred folder.
+            </p>
+          </article>
+
+          <article class="step">
+            <div class="step-number">02</div>
+            <h3>Select your settings</h3>
+            <p>
+              Choose Encrypt or Decrypt, content type, algorithm, mode, and
+              enter your key locally.
+            </p>
+          </article>
+
+          <article class="step">
+            <div class="step-number">03</div>
+            <h3>Review and use output</h3>
+            <p>
+              Preview generated output in the Result area, then copy it or
+              export it as a file.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="security">
+      <div class="container">
+        <article class="security-box">
+          <div class="security-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3 4.5 6v5c0 4.6 3.2 8.8 7.5 10 4.3-1.2 7.5-5.4 7.5-10V6L12 3Z"></path>
+              <path d="m8.8 12 2.1 2.1 4.3-4.4"></path>
+            </svg>
+          </div>
+
+          <div>
+            <p class="eyebrow" style="color: var(--success)">Local-first security</p>
+
+            <h2>Your encryption key stays on your machine.</h2>
+
+            <p>
+              Mule Secure Studio is a desktop utility. Your encryption/decryption
+              key is entered locally for the requested operation. It is not sent
+              to a browser and is not stored by the tool.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="download">
+      <div class="container">
+        <article class="download-card">
+          <p class="eyebrow" style="color: #aeeaff">Ready to try it?</p>
+
+          <h2>Make secure-properties work feel less manual.</h2>
+
+          <p>
+            Download Mule Secure Studio for Windows and simplify your local
+            secure-properties encryption and decryption workflow.
+          </p>
+
+          <div class="hero-actions">
+            <a
+              class="button button-primary"
+              href="https://github.com/rlondhe98/mule-secure-studio/releases/latest/download/MuleSoftSecureProperties.exe"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v12"></path>
+                <path d="m7 10 5 5 5-5"></path>
+                <path d="M5 21h14"></path>
+              </svg>
+              Download for Windows
+            </a>
+
+            <a
+              class="button button-secondary"
+              href="https://github.com/rlondhe98/mule-secure-studio"
+            >
+              View source
+            </a>
+          </div>
+
+          <div class="download-meta">
+			  <span>Windows desktop utility</span>
+			  <span>Requires Java 17</span>
+			  <span>Local key handling</span>
+			  <span>Copy or export results</span>
+			</div>
+
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-content">
+      <div class="footer-disclaimer">
+        <span>© <span id="year"></span> Rohan Londhe.</span>
+        <span>Unofficial community utility. MuleSoft is a trademark of Salesforce, Inc.</span>
+      </div>
+
+      <div class="footer-links">
+        <a href="#top">Back to top</a>
+        <a href="https://github.com/rlondhe98/mule-secure-studio">GitHub</a>
+        <a href="#security">Security</a>
+      </div>
+    </div>
+  </footer>
+
+  <dialog id="howDialog" aria-labelledby="dialogTitle">
+    <div class="dialog-content">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">Quick start</p>
+          <h2 id="dialogTitle">How Mule Secure Studio works</h2>
+        </div>
+
+        <form method="dialog">
+          <button class="icon-button" type="submit" aria-label="Close dialog">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m6 6 12 12"></path>
+              <path d="m18 6-12 12"></path>
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <ol>
+        <li>Launch the local Windows application.</li>
+        <li>Select Encrypt or Decrypt and choose a processing mode.</li>
+        <li>Enter the encryption key locally and provide a value or source file.</li>
+        <li>Review generated output, copy it, or export it when needed.</li>
+      </ol>
+
+      <form method="dialog" style="margin-top: 1.25rem">
+        <button class="button button-primary" type="submit">Got it</button>
+      </form>
+    </div>
+  </dialog>
+
+  <script>
+    const root = document.documentElement;
+    const themeToggle = document.getElementById("themeToggle");
+    const menuToggle = document.getElementById("menuToggle");
+    const siteHeader = document.getElementById("siteHeader");
+    const howButton = document.getElementById("howButton");
+    const howDialog = document.getElementById("howDialog");
+    const modeTabs = document.querySelectorAll(".mode-tab");
+
+    const modeContent = {
+      single: {
+        eyebrow: "Single value",
+        title: "Encrypt or decrypt one secret.",
+        description:
+          "Use this mode for an individual value that you want to place into a Mule configuration file or use elsewhere in your deployment workflow.",
+        items: [
+          "Encrypt a password, token, client secret, or API key.",
+          "Copy the generated result directly from the application.",
+          "Optionally use the result in Mule secure-property syntax."
+        ]
+      },
+      properties: {
+        eyebrow: "Property values in file",
+        title: "Keep the file structure while securing values.",
+        description:
+          "Use this mode for YAML or properties files when you want to encrypt or decrypt individual property values while preserving the original structure.",
+        items: [
+          "Select YAML, YML, or properties files through the file picker.",
+          "Preview generated content directly in the Result area.",
+          "Export the processed file only after reviewing the output."
+        ]
+      },
+      file: {
+        eyebrow: "Entire file contents",
+        title: "Secure the complete file as one encrypted block.",
+        description:
+          "Use file-level encryption when your Mule configuration is designed to encrypt and decrypt the full configuration file rather than individual values.",
+        items: [
+          "Encrypt all file contents into one secure payload.",
+          "Decrypt file content locally and preview it before saving.",
+          "Use only when your Mule configuration expects file-level encryption."
+        ]
+      }
+    };
+
+    function setTheme(theme) {
+      root.dataset.theme = theme;
+      localStorage.setItem("muleSecureStudioTheme", theme);
+
+      const label =
+        theme === "dark"
+          ? "Switch to light mode"
+          : "Switch to dark mode";
+
+      themeToggle.setAttribute("aria-label", label);
+      themeToggle.setAttribute("title", label);
+    }
+
+    const savedTheme = localStorage.getItem("muleSecureStudioTheme");
+    const systemPrefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    setTheme(savedTheme || (systemPrefersDark ? "dark" : "light"));
+
+    themeToggle.addEventListener("click", () => {
+      setTheme(root.dataset.theme === "dark" ? "light" : "dark");
+    });
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = siteHeader.dataset.menuOpen === "true";
+
+      siteHeader.dataset.menuOpen = String(!isOpen);
+      menuToggle.setAttribute("aria-expanded", String(!isOpen));
+      menuToggle.setAttribute(
+        "aria-label",
+        isOpen ? "Open navigation menu" : "Close navigation menu"
+      );
+    });
+
+    document.querySelectorAll(".nav-links a").forEach((link) => {
+      link.addEventListener("click", () => {
+        siteHeader.dataset.menuOpen = "false";
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Open navigation menu");
+      });
+    });
+
+    howButton.addEventListener("click", () => {
+      howDialog.showModal();
+    });
+
+    modeTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const selectedMode = tab.dataset.mode;
+        const content = modeContent[selectedMode];
+
+        modeTabs.forEach((item) => {
+          item.setAttribute("aria-selected", String(item === tab));
+        });
+
+        document.querySelector("#modePanel .eyebrow").textContent =
+          content.eyebrow;
+
+        document.getElementById("modeTitle").textContent = content.title;
+
+        document.getElementById("modeDescription").textContent =
+          content.description;
+
+        document.getElementById("modeList").innerHTML = content.items
+          .map((item) => `<li>${item}</li>`)
+          .join("");
+      });
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
