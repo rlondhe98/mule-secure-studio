@@ -737,35 +737,65 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
 
         <!-- Footer -->
         <Border
-            Grid.Row="2"
-            Background="White"
-            BorderBrush="#DFE7F0"
-            BorderThickness="1,1,0,0"
-            Padding="24,10">
+    Grid.Row="2"
+    Background="White"
+    BorderBrush="#DFE7F0"
+    BorderThickness="1,1,0,0"
+    Padding="24,10">
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
 
-                <TextBlock
-                    x:Name="txtStatusDot"
-                    Text="●"
-                    Foreground="#16A34A"
-                    FontSize="16"
-                    VerticalAlignment="Center"/>
+        <!-- Status indicator -->
+        <Ellipse
+    x:Name="statusIndicator"
+    Width="10"
+    Height="10"
+    Fill="#16A34A"
+    VerticalAlignment="Center"/>
 
-                <TextBlock
-                    x:Name="lblStatus"
-                    Grid.Column="1"
-                    Text="Ready."
-                    Foreground="#475467"
-                    FontSize="12"
-                    Margin="8,0,0,0"
-                    VerticalAlignment="Center"/>
-            </Grid>
-        </Border>
+
+        <!-- Status message -->
+        <TextBlock
+            x:Name="lblStatus"
+            Grid.Column="1"
+            Text="Ready."
+            Foreground="#475467"
+            FontSize="12"
+            Margin="8,0,0,0"
+            VerticalAlignment="Center"/>
+
+        <!-- Watermark / attribution -->
+        <TextBlock
+    Grid.Column="2"
+    FontSize="11"
+    VerticalAlignment="Center"
+    HorizontalAlignment="Right">
+
+    <Run
+        Text="Mule Secure Studio | "
+        Foreground="#8A9AAF"
+        FontWeight="SemiBold"/>
+
+    <Hyperlink
+        x:Name="lnkWebsite"
+        NavigateUri="https://rohanlondhe.in"
+        Foreground="#1769AA"
+        FontWeight="SemiBold"
+        TextDecorations="None"
+        ToolTip="Open rohanlondhe.in">
+
+        <Run Text="rohanlondhe.in"/>
+    </Hyperlink>
+</TextBlock>
+
+    </Grid>
+</Border>
+
     </Grid>
 </Window>
 '@
@@ -809,8 +839,11 @@ $btnCopyResult     = $window.FindName("btnCopyResult")
 $btnClear          = $window.FindName("btnClear")
 $btnClose          = $window.FindName("btnClose")
 
-$txtStatusDot      = $window.FindName("txtStatusDot")
+$statusIndicator   = $window.FindName("statusIndicator")
 $lblStatus         = $window.FindName("lblStatus")
+$lnkWebsite        = $window.FindName("lnkWebsite")
+
+
 
 # ============================================================
 # Application State
@@ -832,7 +865,8 @@ function Set-Status {
     $brush = [System.Windows.Media.BrushConverter]::new().ConvertFromString($Color)
 
     $lblStatus.Foreground = $brush
-    $txtStatusDot.Foreground = $brush
+	$statusIndicator.Fill = $brush
+
 }
 
 function Get-Operation {
@@ -1258,9 +1292,20 @@ $btnClose.Add_Click({
 })
 
 # ============================================================
+# Open creator website
+# ============================================================
+$lnkWebsite.Add_RequestNavigate({
+    param($sender, $eventArgs)
+
+    Start-Process $eventArgs.Uri.AbsoluteUri
+
+    $eventArgs.Handled = $true
+})
+
+# ============================================================
 # Start
 # ============================================================
 Update-TargetUI
-Set-Status "Ready." "#475467"
+Set-Status "Ready." "#16A34A"
 
 [void] $window.ShowDialog()
