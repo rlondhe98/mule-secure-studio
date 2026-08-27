@@ -1,0 +1,18 @@
+//Decrypt complete secure file
+java -cp secure-properties-tool-j17.jar com.mulesoft.tools.SecurePropertiesTool file decrypt AES CBC M76rvgeJHMZRW3Ye C:/Users/qlg9915/git-repo/eds-ch2-gcc-dynamic-salesforce-sys/src/main/resources/configurations/secure/dev-secure.yaml dev-secure-decrypted.yaml
+
+//DWL to convert YAML file to JSON to load into Hashicorp
+//Create devSecure.yaml, uatSecure.yaml and prodSecure.yaml in online DWL and paste the complete decrypted yaml file.
+%dw 2.0
+output application/json
+
+fun yamlToJson(obj, prefix="") =
+  (obj pluck ((value, key) ->
+    if (value is Object)
+      yamlToJson(value, prefix ++ (if (prefix == "") "" else ".") ++ (key as String))
+    else
+      { ((prefix ++ (if (prefix == "") "" else ".") ++ (key as String))): value }
+  )) reduce ((item, acc = {}) -> acc ++ item)
+
+---
+yamlToJson(uatSecure)

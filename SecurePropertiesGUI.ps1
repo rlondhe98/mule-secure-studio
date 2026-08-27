@@ -65,6 +65,26 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
 
     <Window.Resources>
 
+        <SolidColorBrush x:Key="ComboHoverBg" Color="#FAFDFF"/>
+        <SolidColorBrush x:Key="ComboHoverBorder" Color="#5799D0"/>
+        <SolidColorBrush x:Key="ComboFocusBorder" Color="#1769AA"/>
+        <SolidColorBrush x:Key="ComboPopupBg" Color="White"/>
+        <SolidColorBrush x:Key="ComboPopupBorder" Color="#CBD8E6"/>
+        <SolidColorBrush x:Key="ComboArrowFill" Color="#667085"/>
+        <SolidColorBrush x:Key="ComboItemHighlightBg" Color="#EAF4FE"/>
+        <SolidColorBrush x:Key="ComboItemHighlightFg" Color="#1769AA"/>
+        <SolidColorBrush x:Key="ComboItemSelectedBg" Color="#D8ECFF"/>
+        <SolidColorBrush x:Key="ComboItemSelectedFg" Color="#0D5D9B"/>
+
+        <SolidColorBrush x:Key="SecBtnBg" Color="White"/>
+        <SolidColorBrush x:Key="SecBtnFg" Color="#344054"/>
+        <SolidColorBrush x:Key="SecBtnBdr" Color="#C7D4E3"/>
+        <SolidColorBrush x:Key="SecBtnHoverBg" Color="#EEF5FC"/>
+        <SolidColorBrush x:Key="SecBtnHoverBdr" Color="#7AAEDD"/>
+        <SolidColorBrush x:Key="SecBtnDisabledBg" Color="#F0F0F0"/>
+        <SolidColorBrush x:Key="SecBtnDisabledFg" Color="#9DA5B0"/>
+        <SolidColorBrush x:Key="SecBtnDisabledBdr" Color="#DDE3EB"/>
+
         <Style TargetType="Label">
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Foreground" Value="#344054"/>
@@ -120,18 +140,20 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
             <Setter Property="Height" Value="40"/>
             <Setter Property="Padding" Value="15,0"/>
             <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Foreground" Value="#344054"/>
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="#C7D4E3"/>
+            <Setter Property="Foreground" Value="{DynamicResource SecBtnFg}"/>
+            <Setter Property="Background" Value="{DynamicResource SecBtnBg}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource SecBtnBdr}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#EEF5FC"/>
-                    <Setter Property="BorderBrush" Value="#7AAEDD"/>
+                    <Setter Property="Background" Value="{DynamicResource SecBtnHoverBg}"/>
+                    <Setter Property="BorderBrush" Value="{DynamicResource SecBtnHoverBdr}"/>
                 </Trigger>
                 <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Opacity" Value="0.55"/>
+                    <Setter Property="Background" Value="{DynamicResource SecBtnDisabledBg}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource SecBtnDisabledFg}"/>
+                    <Setter Property="BorderBrush" Value="{DynamicResource SecBtnDisabledBdr}"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -156,6 +178,7 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
                             <ToggleButton
                                 x:Name="ToggleButton"
                                 Style="{x:Null}"
+                                Foreground="{TemplateBinding Foreground}"
                                 Background="Transparent"
                                 BorderThickness="0"
                                 Padding="0"
@@ -182,19 +205,20 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
                                             <ColumnDefinition Width="42"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <ContentPresenter
+                                    <ContentPresenter
                                             Margin="12,0,8,0"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Left"
                                             Content="{TemplateBinding SelectionBoxItem}"
                                             ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                            ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"/>
+                                            ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                                            TextBlock.Foreground="{TemplateBinding Foreground}"/>
 
                                         <Border Grid.Column="1" Background="Transparent">
                                             <Path
                                                 Width="10"
                                                 Height="6"
-                                                Fill="#667085"
+                                                Fill="{DynamicResource ComboArrowFill}"
                                                 Stretch="Fill"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
@@ -215,8 +239,8 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
                                 <Border
                                     MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
                                     Margin="0,5,0,0"
-                                    Background="White"
-                                    BorderBrush="#CBD8E6"
+                                    Background="{DynamicResource ComboPopupBg}"
+                                    BorderBrush="{DynamicResource ComboPopupBorder}"
                                     BorderThickness="1"
                                     CornerRadius="8">
 
@@ -241,11 +265,11 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
 
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="OuterBorder" Property="BorderBrush" Value="#5799D0"/>
-                                <Setter TargetName="OuterBorder" Property="Background" Value="#FAFDFF"/>
+                                <Setter TargetName="OuterBorder" Property="BorderBrush" Value="{DynamicResource ComboHoverBorder}"/>
+                                <Setter TargetName="OuterBorder" Property="Background" Value="{DynamicResource ComboHoverBg}"/>
                             </Trigger>
                             <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                                <Setter TargetName="OuterBorder" Property="BorderBrush" Value="#1769AA"/>
+                                <Setter TargetName="OuterBorder" Property="BorderBrush" Value="{DynamicResource ComboFocusBorder}"/>
                                 <Setter TargetName="OuterBorder" Property="BorderThickness" Value="2"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
@@ -279,12 +303,12 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
 
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsHighlighted" Value="True">
-                                <Setter TargetName="ItemBorder" Property="Background" Value="#EAF4FE"/>
-                                <Setter Property="Foreground" Value="#1769AA"/>
+                                <Setter TargetName="ItemBorder" Property="Background" Value="{DynamicResource ComboItemHighlightBg}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource ComboItemHighlightFg}"/>
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="ItemBorder" Property="Background" Value="#D8ECFF"/>
-                                <Setter Property="Foreground" Value="#0D5D9B"/>
+                                <Setter TargetName="ItemBorder" Property="Background" Value="{DynamicResource ComboItemSelectedBg}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource ComboItemSelectedFg}"/>
                                 <Setter Property="FontWeight" Value="SemiBold"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -303,15 +327,17 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Border Grid.Row="0" Background="#123B63" Padding="28,15">
+        <Border x:Name="borderHeader" Grid.Row="0" Background="#123B63" Padding="28,15">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <Border
+                    x:Name="borderLogo"
                     Width="48"
                     Height="48"
                     CornerRadius="12"
@@ -335,20 +361,58 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
                         FontWeight="SemiBold"/>
 
                     <TextBlock
+                        x:Name="txtHeaderSubtitle"
                         Text="Encrypt, decrypt, preview, copy, and export secure properties"
                         Foreground="#D7ECFF"
                         FontSize="11"
                         Margin="0,3,0,0"/>
                 </StackPanel>
 
-                <Border
+                <Button
+                    x:Name="btnThemeToggle"
                     Grid.Column="2"
+                    Content="Dark mode"
+                    FontSize="11"
+                    FontWeight="SemiBold"
+                    Foreground="#D7ECFF"
+                    Background="#1C5281"
+                    Cursor="Hand"
+                    ToolTip="Switch to dark mode"
+                    Margin="0,0,10,0"
+                    VerticalAlignment="Center">
+
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border
+                                x:Name="ThemeBtnBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="12"
+                                Padding="11,6">
+
+                                <ContentPresenter
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"/>
+                            </Border>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="ThemeBtnBorder" Property="Opacity" Value="0.8"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Border
+                    x:Name="badgeJava"
+                    Grid.Column="3"
                     Background="#1C5281"
                     CornerRadius="12"
                     Padding="11,6"
                     VerticalAlignment="Center">
 
                     <TextBlock
+                        x:Name="txtJavaBadge"
                         Text="Java 17"
                         FontSize="11"
                         Foreground="#D7ECFF"/>
@@ -358,6 +422,7 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
 
         <!-- Main Content -->
         <ScrollViewer
+            x:Name="scrollContent"
             Grid.Row="1"
             VerticalScrollBarVisibility="Auto"
             HorizontalScrollBarVisibility="Disabled">
@@ -372,7 +437,7 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
                 </Grid.RowDefinitions>
 
                 <!-- Configuration -->
-                <Border Grid.Row="0" Style="{StaticResource CardStyle}">
+                <Border x:Name="cardConfig" Grid.Row="0" Style="{StaticResource CardStyle}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -390,12 +455,14 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
 
                             <StackPanel>
                                 <TextBlock
+                                    x:Name="txtConfigTitle"
                                     Text="Configuration"
                                     FontSize="17"
                                     FontWeight="SemiBold"
                                     Foreground="#1D2939"/>
 
                                 <TextBlock
+                                    x:Name="txtConfigSubtitle"
                                     Text="Select how the tool should process your secure properties."
                                     FontSize="11"
                                     Foreground="#667085"
@@ -403,6 +470,7 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
                             </StackPanel>
 
                             <Border
+                                x:Name="badgeSecurity"
                                 Grid.Column="1"
                                 Background="#EAF4FE"
                                 CornerRadius="12"
@@ -410,6 +478,7 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
                                 VerticalAlignment="Top">
 
                                 <TextBlock
+                                    x:Name="txtSecurityBadge"
                                     Text="Security settings"
                                     Foreground="#1769AA"
                                     FontSize="10"/>
@@ -503,6 +572,7 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
                         </Grid>
 
                         <Border
+                            x:Name="borderHint"
                             Grid.Row="4"
                             Background="#F7FAFD"
                             BorderBrush="#E0EAF4"
@@ -521,7 +591,7 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
                 </Border>
 
                 <!-- Encryption Key -->
-                <Border Grid.Row="2" Style="{StaticResource CardStyle}">
+                <Border x:Name="cardKey" Grid.Row="2" Style="{StaticResource CardStyle}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -552,7 +622,7 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
                 </Border>
 
                 <!-- Input and Result -->
-                <Border Grid.Row="4" Style="{StaticResource CardStyle}">
+                <Border x:Name="cardInputResult" Grid.Row="4" Style="{StaticResource CardStyle}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -572,6 +642,7 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
 
                             <StackPanel>
                                 <TextBlock
+                                    x:Name="txtInputResultTitle"
                                     Text="Input and Result"
                                     FontSize="17"
                                     FontWeight="SemiBold"
@@ -586,6 +657,7 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
                             </StackPanel>
 
                             <Border
+                                x:Name="badgeTarget"
                                 Grid.Column="1"
                                 Background="#F0F7FE"
                                 CornerRadius="10"
@@ -621,13 +693,16 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
                             Grid.Row="2"
                             Visibility="Collapsed">
 
-                            <Label Content="Input configuration file"/>
+                            <Label x:Name="lblFileInputLabel" Content="Input configuration file"/>
 
-                            <Grid>
+                            <!-- File selection row -->
+                            <Grid x:Name="gridFileSelect">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="10"/>
                                     <ColumnDefinition Width="115"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="120"/>
                                 </Grid.ColumnDefinitions>
 
                                 <TextBox
@@ -639,7 +714,32 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
                                     Grid.Column="2"
                                     Content="Select file..."
                                     Style="{StaticResource SecondaryButton}"/>
+
+                                <Button
+                                    x:Name="btnTogglePaste"
+                                    Grid.Column="4"
+                                    Content="Paste content"
+                                    Style="{StaticResource SecondaryButton}"/>
                             </Grid>
+
+                            <!-- Paste content area (toggled) -->
+                            <StackPanel x:Name="panelPasteInput" Visibility="Collapsed">
+                                <TextBox
+                                    x:Name="txtPasteContent"
+                                    Height="160"
+                                    AcceptsReturn="True"
+                                    TextWrapping="Wrap"
+                                    VerticalScrollBarVisibility="Auto"
+                                    FontFamily="Consolas"
+                                    FontSize="11"/>
+
+                                <Button
+                                    x:Name="btnBackToFile"
+                                    Content="Back to file selection"
+                                    Style="{StaticResource SecondaryButton}"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,8,0,0"/>
+                            </StackPanel>
 
                             <TextBlock
                                 x:Name="txtFileHint"
@@ -695,6 +795,8 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="8"/>
                                     <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="8"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
                                 <Label
@@ -703,8 +805,16 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
                                     FontWeight="SemiBold"/>
 
                                 <Button
-                                    x:Name="btnExportResult"
+                                    x:Name="btnConvertJson"
                                     Grid.Column="1"
+                                    Content="Convert to Flat JSON"
+                                    Style="{StaticResource SecondaryButton}"
+                                    Padding="12,0"
+                                    IsEnabled="False"/>
+
+                                <Button
+                                    x:Name="btnExportResult"
+                                    Grid.Column="3"
                                     Content="Export result..."
                                     Style="{StaticResource SecondaryButton}"
                                     Padding="12,0"
@@ -712,7 +822,7 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
 
                                 <Button
                                     x:Name="btnCopyResult"
-                                    Grid.Column="3"
+                                    Grid.Column="5"
                                     Content="Copy result"
                                     Style="{StaticResource SecondaryButton}"
                                     Padding="12,0"
@@ -737,6 +847,7 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
 
         <!-- Footer -->
         <Border
+    x:Name="borderFooter"
     Grid.Row="2"
     Background="White"
     BorderBrush="#DFE7F0"
@@ -825,6 +936,12 @@ $txtInputFile      = $window.FindName("txtInputFile")
 $txtFileHint       = $window.FindName("txtFileHint")
 
 $btnBrowseInput    = $window.FindName("btnBrowseInput")
+$btnTogglePaste    = $window.FindName("btnTogglePaste")
+$btnBackToFile     = $window.FindName("btnBackToFile")
+$gridFileSelect    = $window.FindName("gridFileSelect")
+$panelPasteInput   = $window.FindName("panelPasteInput")
+$txtPasteContent   = $window.FindName("txtPasteContent")
+$lblFileInputLabel = $window.FindName("lblFileInputLabel")
 
 $lblConfigurationHint = $window.FindName("lblConfigurationHint")
 $lblTargetDescription = $window.FindName("lblTargetDescription")
@@ -836,12 +953,45 @@ $txtResult         = $window.FindName("txtResult")
 $btnRun            = $window.FindName("btnRun")
 $btnExportResult   = $window.FindName("btnExportResult")
 $btnCopyResult     = $window.FindName("btnCopyResult")
+$btnConvertJson    = $window.FindName("btnConvertJson")
 $btnClear          = $window.FindName("btnClear")
 $btnClose          = $window.FindName("btnClose")
 
 $statusIndicator   = $window.FindName("statusIndicator")
 $lblStatus         = $window.FindName("lblStatus")
 $lnkWebsite        = $window.FindName("lnkWebsite")
+
+$borderHeader      = $window.FindName("borderHeader")
+$scrollContent     = $window.FindName("scrollContent")
+$cardConfig        = $window.FindName("cardConfig")
+$cardKey           = $window.FindName("cardKey")
+$cardInputResult   = $window.FindName("cardInputResult")
+$borderHint        = $window.FindName("borderHint")
+$borderFooter      = $window.FindName("borderFooter")
+$txtConfigTitle    = $window.FindName("txtConfigTitle")
+$txtConfigSubtitle = $window.FindName("txtConfigSubtitle")
+$badgeSecurity     = $window.FindName("badgeSecurity")
+$txtSecurityBadge  = $window.FindName("txtSecurityBadge")
+$txtInputResultTitle = $window.FindName("txtInputResultTitle")
+$badgeTarget       = $window.FindName("badgeTarget")
+$btnThemeToggle    = $window.FindName("btnThemeToggle")
+$borderLogo        = $window.FindName("borderLogo")
+$txtHeaderSubtitle = $window.FindName("txtHeaderSubtitle")
+$badgeJava         = $window.FindName("badgeJava")
+$txtJavaBadge      = $window.FindName("txtJavaBadge")
+
+# Set window icon — use process path (works in both .ps1 and PS2EXE .exe)
+try {
+    $exeDir = Split-Path ([System.Diagnostics.Process]::GetCurrentProcess().MainModule.FileName) -Parent
+    $iconPath = Join-Path $exeDir "MuleSoftSecureProperties.ico"
+    if (-not (Test-Path -LiteralPath $iconPath -PathType Leaf) -and $PSScriptRoot) {
+        $iconPath = Join-Path $PSScriptRoot "MuleSoftSecureProperties.ico"
+    }
+    if (Test-Path -LiteralPath $iconPath -PathType Leaf) {
+        $window.Icon = [System.Windows.Media.Imaging.BitmapFrame]::Create(
+            [System.Uri]::new($iconPath, [System.UriKind]::Absolute))
+    }
+} catch {}
 
 
 
@@ -850,6 +1000,215 @@ $lnkWebsite        = $window.FindName("lnkWebsite")
 # ============================================================
 $script:SelectedMethod = "string"
 $script:LastOutputExtension = ".yaml"
+$script:PasteMode = $false
+$script:ThemeSettingsPath = Join-Path $env:LOCALAPPDATA "Takeda\MuleSoftSecureProperties\theme.txt"
+
+function Get-SavedTheme {
+    if (Test-Path $script:ThemeSettingsPath) {
+        $saved = (Get-Content $script:ThemeSettingsPath -Raw).Trim()
+        if ($saved -eq "dark" -or $saved -eq "light") { return $saved }
+    }
+    return "light"
+}
+
+function Save-Theme {
+    param([string]$Theme)
+    $folder = Split-Path $script:ThemeSettingsPath -Parent
+    if (-not (Test-Path $folder)) { New-Item -Path $folder -ItemType Directory -Force | Out-Null }
+    Set-Content -Path $script:ThemeSettingsPath -Value $Theme -NoNewline
+}
+
+# Walks the logical tree and returns all descendant DependencyObjects
+function Get-LogicalDescendants {
+    param([System.Windows.DependencyObject]$element)
+    foreach ($child in [System.Windows.LogicalTreeHelper]::GetChildren($element)) {
+        if ($child -is [System.Windows.DependencyObject]) {
+            $child
+            Get-LogicalDescendants $child
+        }
+    }
+}
+
+function Apply-Theme {
+    param([string]$Theme)
+
+    $dark = $Theme -eq "dark"
+    $script:CurrentTheme = $Theme
+    $bc = [System.Windows.Media.BrushConverter]::new()
+
+    # Color palette
+    $windowBg      = $bc.ConvertFromString($(if ($dark) { "#0E0E0E" } else { "#F5F7FB" }))
+    $cardBg        = $bc.ConvertFromString($(if ($dark) { "#1A1A1A" } else { "White" }))
+    $cardBorder    = $bc.ConvertFromString($(if ($dark) { "#2E2E2E" } else { "#DFE7F0" }))
+    $inputBg       = $bc.ConvertFromString($(if ($dark) { "#111111" } else { "White" }))
+    $inputBorder   = $bc.ConvertFromString($(if ($dark) { "#3A3A3A" } else { "#C7D4E3" }))
+    $inputFg       = $bc.ConvertFromString($(if ($dark) { "#F0F0F0" } else { "#1D2939" }))
+    $resultBg      = $bc.ConvertFromString($(if ($dark) { "#111111" } else { "#F8FAFC" }))
+    $hintBg        = $bc.ConvertFromString($(if ($dark) { "#141414" } else { "#F7FAFD" }))
+    $hintBorderC   = $bc.ConvertFromString($(if ($dark) { "#2E2E2E" } else { "#E0EAF4" }))
+    $titleFg       = $bc.ConvertFromString($(if ($dark) { "#FFFFFF" } else { "#1D2939" }))
+    $labelFg       = $bc.ConvertFromString($(if ($dark) { "#E0E0E0" } else { "#344054" }))
+    $mutedFg       = $bc.ConvertFromString($(if ($dark) { "#B0B0B0" } else { "#667085" }))
+    $hintFg        = $bc.ConvertFromString($(if ($dark) { "#B0B0B0" } else { "#52657A" }))
+    $badgeBg       = $bc.ConvertFromString($(if ($dark) { "#152030" } else { "#EAF4FE" }))
+    $badgeFg       = $bc.ConvertFromString($(if ($dark) { "#6CB4EE" } else { "#1769AA" }))
+    $badgeTargetBg = $bc.ConvertFromString($(if ($dark) { "#152030" } else { "#F0F7FE" }))
+    $checkFg       = $bc.ConvertFromString($(if ($dark) { "#E0E0E0" } else { "#1D2939" }))
+    $comboBg       = $bc.ConvertFromString($(if ($dark) { "#111111" } else { "White" }))
+    $comboFg       = $bc.ConvertFromString($(if ($dark) { "#F0F0F0" } else { "#1D2939" }))
+    $comboBdr      = $bc.ConvertFromString($(if ($dark) { "#3A3A3A" } else { "#CBD8E6" }))
+
+    # Window
+    $window.Background = $windowBg
+
+    # Header
+    $headerBg = $bc.ConvertFromString($(if ($dark) { "#0E0E0E" } else { "#123B63" }))
+    $borderHeader.Background = $headerBg
+    $borderLogo.Background = $bc.ConvertFromString($(if ($dark) { "#2A2A2A" } else { "#2D83CC" }))
+    $txtHeaderSubtitle.Foreground = $bc.ConvertFromString($(if ($dark) { "#888888" } else { "#D7ECFF" }))
+    $badgeJava.Background = $bc.ConvertFromString($(if ($dark) { "#1A1A1A" } else { "#1C5281" }))
+    $txtJavaBadge.Foreground = $bc.ConvertFromString($(if ($dark) { "#B0B0B0" } else { "#D7ECFF" }))
+
+    # Primary button
+    $primaryBg = $bc.ConvertFromString($(if ($dark) { "#E0E0E0" } else { "#1769AA" }))
+    $primaryFg = $bc.ConvertFromString($(if ($dark) { "#0E0E0E" } else { "White" }))
+    $btnRun.Background = $primaryBg
+    $btnRun.BorderBrush = $primaryBg
+    $btnRun.Foreground = $primaryFg
+
+    # Cards
+    foreach ($card in @($cardConfig, $cardKey, $cardInputResult)) {
+        $card.Background = $cardBg
+        $card.BorderBrush = $cardBorder
+    }
+
+    # Hint border
+    $borderHint.Background = $hintBg
+    $borderHint.BorderBrush = $hintBorderC
+
+    # Footer
+    $borderFooter.Background = $cardBg
+    $borderFooter.BorderBrush = $cardBorder
+
+    # TextBoxes
+    foreach ($tb in @($txtSingleValue, $txtInputFile, $txtKeyVisible, $txtPasteContent)) {
+        $tb.Background = $inputBg
+        $tb.BorderBrush = $inputBorder
+        $tb.Foreground = $inputFg
+    }
+    $txtResult.Background = $resultBg
+    $txtResult.BorderBrush = $inputBorder
+    $txtResult.Foreground = $inputFg
+
+    # PasswordBox
+    $txtKeyPassword.Background = $inputBg
+    $txtKeyPassword.BorderBrush = $inputBorder
+    $txtKeyPassword.Foreground = $inputFg
+
+    # ComboBoxes and their items
+    foreach ($cmb in @($cmbOperation, $cmbTarget, $cmbAlgorithm, $cmbEncryptionMode)) {
+        $cmb.Background = $comboBg
+        $cmb.Foreground = $comboFg
+        $cmb.BorderBrush = $comboBdr
+        foreach ($item in $cmb.Items) {
+            if ($item -is [System.Windows.Controls.ComboBoxItem]) {
+                $item.Foreground = $comboFg
+                $item.Background = $bc.ConvertFromString($(if ($dark) { "#1A1A1A" } else { "Transparent" }))
+            }
+        }
+    }
+
+    # ComboBox dynamic resources (popup, hover, selection)
+    # Must use Remove+Add — indexer wraps values in PSObject which WPF can't cast to Brush
+    $comboResources = @{
+        ComboHoverBg         = if ($dark) { "#2A2A2A" } else { "#FAFDFF" }
+        ComboHoverBorder     = if ($dark) { "#555555" } else { "#5799D0" }
+        ComboFocusBorder     = if ($dark) { "#666666" } else { "#1769AA" }
+        ComboPopupBg         = if ($dark) { "#1A1A1A" } else { "#FFFFFF" }
+        ComboPopupBorder     = if ($dark) { "#3A3A3A" } else { "#CBD8E6" }
+        ComboArrowFill       = if ($dark) { "#B0B0B0" } else { "#667085" }
+        ComboItemHighlightBg = if ($dark) { "#2A2A2A" } else { "#EAF4FE" }
+        ComboItemHighlightFg = if ($dark) { "#FFFFFF" } else { "#1769AA" }
+        ComboItemSelectedBg  = if ($dark) { "#333333" } else { "#D8ECFF" }
+        ComboItemSelectedFg  = if ($dark) { "#FFFFFF" } else { "#0D5D9B" }
+    }
+    foreach ($entry in $comboResources.GetEnumerator()) {
+        $brush = [System.Windows.Media.SolidColorBrush]::new(
+            [System.Windows.Media.ColorConverter]::ConvertFromString($entry.Value)
+        )
+        $window.Resources.Remove($entry.Key)
+        $window.Resources.Add($entry.Key, $brush)
+    }
+
+    # Named titles and badges
+    $txtConfigTitle.Foreground = $titleFg
+    $txtConfigSubtitle.Foreground = $mutedFg
+    $txtInputResultTitle.Foreground = $titleFg
+    $badgeSecurity.Background = $badgeBg
+    $txtSecurityBadge.Foreground = $badgeFg
+    $badgeTarget.Background = $badgeTargetBg
+    $lblTargetHint.Foreground = $badgeFg
+    $lblConfigurationHint.Foreground = $hintFg
+    $lblTargetDescription.Foreground = $mutedFg
+    $txtFileHint.Foreground = $mutedFg
+
+    # Labels and CheckBoxes
+    foreach ($lbl in @($lblResult, $lblFileInputLabel)) {
+        $lbl.Foreground = $labelFg
+    }
+    $chkRandomIV.Foreground = $checkFg
+    $chkShowKey.Foreground = $checkFg
+
+    # Secondary buttons — DynamicResource, same Remove+Add pattern
+    $secBtnResources = @{
+        SecBtnBg          = if ($dark) { "#2E2E2E" } else { "#FFFFFF" }
+        SecBtnFg          = if ($dark) { "#FFFFFF" } else { "#344054" }
+        SecBtnBdr         = if ($dark) { "#5A5A5A" } else { "#C7D4E3" }
+        SecBtnHoverBg     = if ($dark) { "#3A3A3A" } else { "#EEF5FC" }
+        SecBtnHoverBdr    = if ($dark) { "#6CB4EE" } else { "#7AAEDD" }
+        SecBtnDisabledBg  = if ($dark) { "#222222" } else { "#F0F0F0" }
+        SecBtnDisabledFg  = if ($dark) { "#777777" } else { "#9DA5B0" }
+        SecBtnDisabledBdr = if ($dark) { "#3A3A3A" } else { "#DDE3EB" }
+    }
+    foreach ($entry in $secBtnResources.GetEnumerator()) {
+        $brush = [System.Windows.Media.SolidColorBrush]::new(
+            [System.Windows.Media.ColorConverter]::ConvertFromString($entry.Value)
+        )
+        $window.Resources.Remove($entry.Key)
+        $window.Resources.Add($entry.Key, $brush)
+    }
+
+    # Walk content area for remaining Labels and TextBlocks
+    foreach ($el in (Get-LogicalDescendants $scrollContent)) {
+        if ($el -is [System.Windows.Controls.Label] -and [string]::IsNullOrEmpty($el.Name)) {
+            $el.Foreground = $labelFg
+        }
+        elseif ($el -is [System.Windows.Controls.TextBlock] -and [string]::IsNullOrEmpty($el.Name)) {
+            if ($el.FontWeight -eq [System.Windows.FontWeights]::SemiBold -and $el.FontSize -ge 17) {
+                $el.Foreground = $titleFg
+            }
+            elseif ($el.FontSize -le 11) {
+                $el.Foreground = $mutedFg
+            }
+            else {
+                $el.Foreground = $labelFg
+            }
+        }
+    }
+
+    # Footer text
+    foreach ($el in (Get-LogicalDescendants $borderFooter)) {
+        if ($el -is [System.Windows.Controls.TextBlock] -and [string]::IsNullOrEmpty($el.Name)) {
+            $el.Foreground = $mutedFg
+        }
+    }
+
+    # Toggle button label
+    $btnThemeToggle.Content  = if ($dark) { "Light mode" } else { "Dark mode" }
+    $btnThemeToggle.ToolTip  = if ($dark) { "Switch to light mode" } else { "Switch to dark mode" }
+    $btnThemeToggle.Foreground = $bc.ConvertFromString($(if ($dark) { "#B0B0B0" } else { "#D7ECFF" }))
+    $btnThemeToggle.Background = $bc.ConvertFromString($(if ($dark) { "#1A1A1A" } else { "#1C5281" }))
+}
 
 # ============================================================
 # Helper Functions
@@ -907,6 +1266,7 @@ function Update-TargetUI {
     $txtResult.Clear()
     $btnCopyResult.IsEnabled = $false
     $btnExportResult.IsEnabled = $false
+    $btnConvertJson.IsEnabled = $false
 
     if ($method -eq "string") {
         $panelValueMode.Visibility = [System.Windows.Visibility]::Visible
@@ -939,6 +1299,13 @@ function Update-TargetUI {
         $txtFileHint.Text = "Generated content appears in the Result area before export."
         $lblResult.Content = "Generated file content"
     }
+
+    # Reset paste mode when switching content types
+    $script:PasteMode = $false
+    $gridFileSelect.Visibility = [System.Windows.Visibility]::Visible
+    $panelPasteInput.Visibility = [System.Windows.Visibility]::Collapsed
+    $lblFileInputLabel.Content = "Input configuration file"
+    $txtPasteContent.Clear()
 
     Update-OperationUI
 }
@@ -1007,6 +1374,25 @@ $btnBrowseInput.Add_Click({
     }
 })
 
+# Toggle between file selection and paste content
+$btnTogglePaste.Add_Click({
+    $script:PasteMode = $true
+    $gridFileSelect.Visibility = [System.Windows.Visibility]::Collapsed
+    $panelPasteInput.Visibility = [System.Windows.Visibility]::Visible
+    $lblFileInputLabel.Content = "Paste file contents to encrypt or decrypt"
+    $txtInputFile.Clear()
+    Set-Status "Paste mode: paste your file contents and click Run." "#1769AA"
+})
+
+$btnBackToFile.Add_Click({
+    $script:PasteMode = $false
+    $panelPasteInput.Visibility = [System.Windows.Visibility]::Collapsed
+    $gridFileSelect.Visibility = [System.Windows.Visibility]::Visible
+    $lblFileInputLabel.Content = "Input configuration file"
+    $txtPasteContent.Clear()
+    Set-Status "Ready." "#16A34A"
+})
+
 # ============================================================
 # Encrypt / Decrypt
 # ============================================================
@@ -1015,6 +1401,7 @@ $btnRun.Add_Click({
     $txtResult.Clear()
     $btnCopyResult.IsEnabled = $false
     $btnExportResult.IsEnabled = $false
+    $btnConvertJson.IsEnabled = $false
 
     $operation = Get-Operation
     $method = $script:SelectedMethod
@@ -1023,6 +1410,7 @@ $btnRun.Add_Click({
     $key = Get-KeyValue
 
     $temporaryOutputFile = $null
+    $temporaryInputFile  = $null
 
     if ([string]::IsNullOrWhiteSpace($key)) {
         [System.Windows.MessageBox]::Show(
@@ -1061,6 +1449,44 @@ $btnRun.Add_Click({
             $mode
             $key
             $value
+        )
+    }
+
+    # Paste mode: write pasted text to a temp file, process with selected method
+    elseif ($script:PasteMode) {
+        $pasteValue = $txtPasteContent.Text
+
+        if ([string]::IsNullOrWhiteSpace($pasteValue)) {
+            [System.Windows.MessageBox]::Show(
+                "Paste the file contents to encrypt or decrypt.",
+                "Missing Content",
+                "OK",
+                "Warning"
+            )
+            return
+        }
+
+        $script:LastOutputExtension = ".yaml"
+
+        $temporaryInputFile = Join-Path `
+            ([System.IO.Path]::GetTempPath()) `
+            ("mule-secure-paste-in-" + [System.Guid]::NewGuid().ToString() + ".yaml")
+
+        $temporaryOutputFile = Join-Path `
+            ([System.IO.Path]::GetTempPath()) `
+            ("mule-secure-paste-out-" + [System.Guid]::NewGuid().ToString() + ".yaml")
+
+        $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+        [System.IO.File]::WriteAllText($temporaryInputFile, $pasteValue, $utf8NoBom)
+
+        $toolArguments += @(
+            $method
+            $operation
+            $algorithm
+            $mode
+            $key
+            $temporaryInputFile
+            $temporaryOutputFile
         )
     }
 
@@ -1177,6 +1603,7 @@ $btnRun.Add_Click({
 
         $btnCopyResult.IsEnabled = $true
         $btnExportResult.IsEnabled = $true
+        $btnConvertJson.IsEnabled = $true
 
         Set-Status "Success. You can copy or export the result below." "#15803D"
     }
@@ -1193,14 +1620,16 @@ $btnRun.Add_Click({
         )
     }
     finally {
-        if (
-            -not [string]::IsNullOrWhiteSpace($temporaryOutputFile) -and
-            (Test-Path -LiteralPath $temporaryOutputFile)
-        ) {
-            Remove-Item `
-                -LiteralPath $temporaryOutputFile `
-                -Force `
-                -ErrorAction SilentlyContinue
+        foreach ($tmpFile in @($temporaryOutputFile, $temporaryInputFile)) {
+            if (
+                -not [string]::IsNullOrWhiteSpace($tmpFile) -and
+                (Test-Path -LiteralPath $tmpFile)
+            ) {
+                Remove-Item `
+                    -LiteralPath $tmpFile `
+                    -Force `
+                    -ErrorAction SilentlyContinue
+            }
         }
 
         $window.Cursor = [System.Windows.Input.Cursors]::Arrow
@@ -1280,8 +1709,100 @@ $btnClear.Add_Click({
 
     $btnCopyResult.IsEnabled = $false
     $btnExportResult.IsEnabled = $false
+    $btnConvertJson.IsEnabled = $false
+    $txtPasteContent.Clear()
+
+    $script:PasteMode = $false
+    $gridFileSelect.Visibility = [System.Windows.Visibility]::Visible
+    $panelPasteInput.Visibility = [System.Windows.Visibility]::Collapsed
+    $lblFileInputLabel.Content = "Input configuration file"
 
     Set-Status "Cleared." "#475467"
+})
+
+# ============================================================
+# Convert to Flat JSON
+# ============================================================
+function Convert-YamlToFlatJson {
+    param([string]$YamlText)
+
+    $lines = $YamlText -split "`r?`n"
+    $result = [ordered]@{}
+    $keyStack  = [System.Collections.Generic.List[string]]::new()
+    $indentStack = [System.Collections.Generic.List[int]]::new()
+
+    foreach ($line in $lines) {
+        if ([string]::IsNullOrWhiteSpace($line) -or $line.TrimStart().StartsWith('#')) {
+            continue
+        }
+
+        $m = [regex]::Match($line.TrimStart(), '^([^:#]+?):\s*(.*)')
+        if (-not $m.Success) { continue }
+
+        $indent = $line.Length - $line.TrimStart().Length
+        $k = $m.Groups[1].Value.Trim()
+        $v = $m.Groups[2].Value.Trim()
+
+        while ($keyStack.Count -gt 0 -and $indentStack[$indentStack.Count - 1] -ge $indent) {
+            $keyStack.RemoveAt($keyStack.Count - 1)
+            $indentStack.RemoveAt($indentStack.Count - 1)
+        }
+
+        if ([string]::IsNullOrWhiteSpace($v)) {
+            $keyStack.Add($k)
+            $indentStack.Add($indent)
+        }
+        else {
+            if (($v.StartsWith('"') -and $v.EndsWith('"')) -or
+                ($v.StartsWith("'") -and $v.EndsWith("'"))) {
+                $v = $v.Substring(1, $v.Length - 2)
+            }
+
+            $prefix = $keyStack -join '.'
+            $fullKey = if ($prefix) { "$prefix.$k" } else { $k }
+            $result[$fullKey] = $v
+        }
+    }
+
+    return ($result | ConvertTo-Json -Depth 1)
+}
+
+$btnConvertJson.Add_Click({
+    if ([string]::IsNullOrWhiteSpace($txtResult.Text)) {
+        [System.Windows.MessageBox]::Show(
+            "There is no result to convert.",
+            "Nothing to Convert",
+            "OK",
+            "Warning"
+        )
+        return
+    }
+
+    try {
+        $json = Convert-YamlToFlatJson -YamlText $txtResult.Text
+        $txtResult.Text = $json
+        [System.Windows.Clipboard]::SetText($json)
+        Set-Status "Converted to flat JSON and copied to clipboard." "#15803D"
+    }
+    catch {
+        Set-Status "Failed to convert to JSON." "#B42318"
+
+        [System.Windows.MessageBox]::Show(
+            "Unable to convert the result to flat JSON.`n`n$($_.Exception.Message)",
+            "Conversion Error",
+            "OK",
+            "Error"
+        )
+    }
+})
+
+# ============================================================
+# Theme Toggle
+# ============================================================
+$btnThemeToggle.Add_Click({
+    $newTheme = if ($script:CurrentTheme -eq "dark") { "light" } else { "dark" }
+    Apply-Theme $newTheme
+    Save-Theme $newTheme
 })
 
 # ============================================================
@@ -1306,6 +1827,12 @@ $lnkWebsite.Add_RequestNavigate({
 # Start
 # ============================================================
 Update-TargetUI
+Apply-Theme (Get-SavedTheme)
 Set-Status "Ready." "#16A34A"
+
+# Re-apply after visual tree is built so ComboBox internals get themed
+$window.Add_ContentRendered({
+    Apply-Theme $script:CurrentTheme
+})
 
 [void] $window.ShowDialog()
