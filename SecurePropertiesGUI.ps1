@@ -33,9 +33,6 @@ else {
     $JarPath = $DevelopmentJarPath
 }
 
-
-$JavaExecutable = "java"
-
 if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
     [System.Windows.MessageBox]::Show(
         "Secure Properties Tool JAR was not found.`n`nExpected location:`n$JarPath`n`nUpdate the JarPath variable in SecurePropertiesGUI.ps1.",
@@ -45,6 +42,8 @@ if (-not (Test-Path -LiteralPath $JarPath -PathType Leaf)) {
     )
     exit 1
 }
+
+$JavaExecutable = "java"
 
 # ============================================================
 # User Interface
