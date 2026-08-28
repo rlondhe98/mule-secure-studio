@@ -19,7 +19,7 @@ $GuiScript    = Join-Path $BuildFolder "SecurePropertiesGUI.ps1"
 $SourceJar    = Join-Path $BuildFolder "secure-properties-tool-j17.jar"
 $IconFile     = Join-Path $BuildFolder "MuleSoftSecureProperties.ico"
 $OutputFolder = Join-Path $BuildFolder "dist"
-$OutputExe    = Join-Path $OutputFolder "MuleSoft Secure Properties Tool.exe"
+$OutputExe    = Join-Path $OutputFolder "MuleSecureStudio.exe"
 $TempScript   = Join-Path $BuildFolder "_build_temp.ps1"
 
 # ── Validate inputs ─────────────────────────────────────────
